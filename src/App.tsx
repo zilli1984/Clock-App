@@ -54,11 +54,21 @@ function App() {
   function toggleExpanded() {
     setIsExpanded(!isExpanded);
   }
-
+// hora
   const hours = clock.getHours().toString().padStart(2, '0');
   const minutes = clock.getMinutes().toString().padStart(2, '0');
   const timeString = `${hours}:${minutes}`;
+  // local
   const timeZone = new Date().toLocaleDateString('en', { timeZoneName: 'short' }).split(', ')[1];
+  const dayOfWeek = clock.getDay() + 1;
+
+  // dia do ano
+  const startOfYear = new Date(clock.getFullYear(), 0, 1);
+  const dayOfYear = Math.floor((clock - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+  // numero da semana
+  const weekNumber = Math.ceil(dayOfYear / 7);
+
+
 
   return (
     <>
@@ -99,22 +109,22 @@ function App() {
         </div>
         {isExpanded && (
           <div className="bg-white/75 p-12">
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-2  gap-12">
               <div>
-                <p className="text-sm text-gray-600 mb-2">CURRENT TIMEZONE</p>
-                <p className="text-2xl font-bold">{timeZone}</p>
+                <p className="text-sm font-normal text-neutral-800 mb-2">CURRENT TIMEZONE</p>
+                <p className="text-6xl text-black">{locationName}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-2">DAY OF THE WEEK</p>
-                <p className="text-2xl font-bold">???</p>
+                <p className="text-sm font-normal text-neutral-800 mb-2 mr-5">DAY OF THE WEEK</p>
+                <p className="text-6xl text-black">{dayOfWeek}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-2">DAY OF THE YEAR</p>
-                <p className="text-2xl font-bold">???</p>
+                <p className="text-sm font-normal text-neutral-800 mb-2">DAY OF THE YEAR</p>
+                <p className="text-6xl text-black">{dayOfYear}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-2">WEEK NUMBER</p>
-                <p className="text-2xl font-bold">???</p>
+                <p className="text-sm font-normal text-neutral-800 mb-2">WEEK NUMBER</p>
+                <p className="text-6xl text-black font-bold">{weekNumber}</p>
               </div>
             </div>
           </div>
