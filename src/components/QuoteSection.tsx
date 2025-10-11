@@ -1,20 +1,25 @@
 interface QuoteSectionProps {
-    quote: {
-      content: string;
-      author: string;
-    };
-    onRefresh: () => void;
-  }
-  
-  export function QuoteSection({ quote, onRefresh }: QuoteSectionProps) {
-    return (
-            <div className="flex justify-between items-start max-w-[650px] gap-1 px-5 py-8 md:px-15 lg:pl-40 lg:pt-15">
-              <div>
-                <p className="text-lg font-normal mb-3 max-w-[574px]">{quote.content}</p>
-                <cite className="mt-3">{quote.author}</cite>
-              </div>
-              <button onClick={onRefresh} className="mt-2 cursor-pointer w-6">
-                <img src="/images/refresh.svg" alt="Refresh button" className="w-13 md:w-8 md:h-8" />
-              </button>
-            </div>
-          )};
+  quote: {
+    content: string;
+    author: string;
+  };
+  onRefresh: () => void;
+}
+
+export function QuoteSection({ quote, onRefresh }: QuoteSectionProps) {
+  return (
+    <div className="relative max-w-[650px] px-5 pt-8 min-h-[80px] md:px-16 md:pt-14 lg:px-[8vw] lg:pb-[8vw] lg:max-w-[850px] min-h-[340px]">
+      <div className="pr-10">
+        <p className="text-lg font-normal mb-3 max-w-[574px]">{quote.content}</p>
+        <cite className="mt-3">{quote.author}</cite>
+      </div>
+      <button
+        onClick={onRefresh}
+        className="absolute top-8 right-5 w-8 h-8 flex items-center cursor-pointer justify-center md:pt-13 lg:pt-12"
+      >
+        <img src="/images/refresh.svg" alt="Refresh" className="w-6 h-6" />
+      </button>
+    </div>
+  )
+};
+//

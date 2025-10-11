@@ -4,6 +4,7 @@ import { QuoteSection } from './components/QuoteSection';
 import { ClockSection } from './components/ClockSection';
 import { ExpandedInfo } from './components/ExpandedInfo';
 import { fetchNewQuote } from './services/quoteServices';
+import { getTimeString, getTimeZone, getDayOfWeek, getDayOfYear, getWeekNumber, getPeriodOfDay } from './utils/dateUtils'
 
 function App() {
   const [clock, setClock] = useState(new Date());
@@ -60,31 +61,32 @@ function App() {
     setIsExpanded(!isExpanded);
   }
 
-  const hours = clock.getHours().toString().padStart(2, '0');
-  const minutes = clock.getMinutes().toString().padStart(2, '0');
-  const timeString = `${hours}:${minutes}`;
-
-  const timeZone = new Date().toLocaleDateString('en', { timeZoneName: 'short' }).split(', ')[1];
-  const dayOfWeek = clock.getDay() + 1;
-
-  const startOfYear = new Date(clock.getFullYear(), 0, 1);
-  const dayOfYear = Math.floor((clock.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-
-  const weekNumber = Math.ceil(dayOfYear / 7);
-
-
-
+  const timeString = getTimeString(clock);
+  const timeZone = getTimeZone();
+  const dayOfWeek = getDayOfWeek(clock);
+  const dayOfYear = getDayOfYear(clock);
+  const weekNumber = getWeekNumber(clock);
+  const period = getPeriodOfDay(clock.getHours());
+  const isDaytime = period === 'morning' || period === 'afternoon';
   return (
     <>
-      <div className="bg-[url('/images/day-sm.png')] min-h-screen bg-fixed bg-cover bg-center bg-no-repeat
-                      font-bold text-white 
-                      flex flex-col justify-between
-                      md:bg-[url('/images/day-m.png')]
-                      lg:bg-[url('/images/day-lg.png')]">
+      <div className={`min-h-screen bg-fixed bg-cover bg-center bg-no-repeat font-bold text-white flex flex-col justify-between
+        ${isDaytime
+          ? "bg-[url('/images/day-sm.png')] md:bg-[url('/images/day-m.png')] lg:bg-[url('/images/day-lg.png')]"
+          : "bg-[url('/images/night-sm.png')] md:bg-[url('/images/night-m.png')] lg:bg-[url('/images/night-lg.png')]"
+        }`}>
 
         {!isExpanded && <QuoteSection quote={quote} onRefresh={handleNewQuote} />}
 
-        <ClockSection timeString={timeString} timeZone={timeZone} locationName={locationName} isExpanded={isExpanded} onToggle={toggleExpanded} />
+        <ClockSection
+          timeString={timeString}
+          timeZone={timeZone}
+          locationName={locationName}
+          isExpanded={isExpanded}
+          onToggle={toggleExpanded}
+          period={period}
+          isDaytime={isDaytime}
+        />
 
         {isExpanded && <ExpandedInfo locationName={locationName} dayOfWeek={dayOfWeek} dayOfYear={dayOfYear} weekNumber={weekNumber} />}
       </div>
